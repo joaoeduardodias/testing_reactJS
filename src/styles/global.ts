@@ -4,6 +4,7 @@ export const GlobalStyle = createGlobalStyle`
   :root {
     --background: #f0f2f5;
     --red: #e52e4d;
+    --orange: #E88B00;
     --gray: #12273E;
     --blue: #0534F0;
     --blue-light: #6933FF;
@@ -11,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     --text-title: #363f5f;
     --text-body: #969cb3;
     --shape: #ffffff;
-    -shadow: #8785FF;
+    --shadow: #78ABFF70;
   }
 
 * {

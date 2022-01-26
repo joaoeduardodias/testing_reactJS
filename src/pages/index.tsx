@@ -1,22 +1,13 @@
 import type { NextPage } from 'next';
 import { Header } from '../components/Header';
-import { Input } from '../components/Input';
-import { Container, Content, ContentButton } from './styles';
+import { Container, Content } from './styles';
 
 const Home: NextPage = function () {
   return (
     <>
-      <Header title="Cadastro de Indexadores" />
+      <Header title="Oliveira e Rondelli" />
       <Container>
-        <Content>
-          <form action="">
-            <Input id="symbol" label="Simbolo" />
-            <Input id="name" label="Nome" />
-            <ContentButton>
-              <button type="submit">Cadastrar</button>
-            </ContentButton>
-          </form>
-        </Content>
+        <Content>sasa</Content>
       </Container>
     </>
   );

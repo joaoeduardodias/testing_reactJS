@@ -1,23 +1,19 @@
-import { MdKeyboardArrowLeft } from 'react-icons/md';
-import Link from 'next/link';
 import { Container } from './styles';
 
 interface HeaderProps {
   title: string;
+  openNewIndexModal: () => void;
 }
 
-export function Header({ title }: HeaderProps): JSX.Element {
+export function Header({ title, openNewIndexModal }: HeaderProps): JSX.Element {
   return (
     <Container>
       <div>
-        <Link href="/">
-          <a>
-            <MdKeyboardArrowLeft size={40} />
-          </a>
-        </Link>
         <strong>{title}</strong>
       </div>
-      <button type="button">Novo</button>
+      <button type="button" onClick={openNewIndexModal}>
+        Novo
+      </button>
     </Container>
   );
 }

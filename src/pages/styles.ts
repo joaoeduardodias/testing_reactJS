@@ -11,6 +11,9 @@ export const Content = styled.div`
   padding: 3rem;
   width: 45rem;
   margin-top: 10rem;
+  box-shadow: 0 4px 8px 6px var(--shadow);
+  border: 1px solid var(--text-body);
+  border-radius: 4px;
 
   div + div {
     margin-top: 2rem;
@@ -22,6 +25,16 @@ export const Content = styled.div`
     color: var(--shape);
     font-weight: 600;
     margin: 0 auto;
+  }
+  @media (max-width: 425px) {
+    width: 28rem;
+    padding: 1.5rem;
+  }
+  @media (max-width: 375px) {
+    width: 25rem;
+  }
+  @media (max-width: 325px) {
+    width: 21rem;
   }
 `;
 

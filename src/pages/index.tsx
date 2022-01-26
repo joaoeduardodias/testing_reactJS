@@ -1,19 +1,23 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import type { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { Input } from '../components/Input';
+import { Container, Content, ContentButton } from './styles';
 
 const Home: NextPage = function () {
   return (
     <>
       <Header title="Cadastro de Indexadores" />
-      <main>
-        <div>
+      <Container>
+        <Content>
           <form action="">
-            <Input id="simbolo" label="Simbolo" />
+            <Input id="symbol" label="Simbolo" />
+            <Input id="name" label="Nome" />
+            <ContentButton>
+              <button type="submit">Cadastrar</button>
+            </ContentButton>
           </form>
-        </div>
-      </main>
+        </Content>
+      </Container>
     </>
   );
 };

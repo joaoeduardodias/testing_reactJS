@@ -2,7 +2,7 @@ import { Container } from './styles';
 
 interface HeaderProps {
   title: string;
-  openNewIndexModal: () => void;
+  openNewIndexModal: (modal: string) => void;
 }
 
 export function Header({ title, openNewIndexModal }: HeaderProps): JSX.Element {
@@ -11,7 +11,7 @@ export function Header({ title, openNewIndexModal }: HeaderProps): JSX.Element {
       <div>
         <strong>{title}</strong>
       </div>
-      <button type="button" onClick={openNewIndexModal}>
+      <button type="button" onClick={() => openNewIndexModal('newIndexer')}>
         Novo
       </button>
     </Container>

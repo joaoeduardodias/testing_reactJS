@@ -5,7 +5,7 @@ import { Container } from './styles';
 
 interface CreateIndexerModalProps {
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose: (modal: string) => void;
 }
 
 export function CreateIndexerModal({
@@ -19,13 +19,13 @@ export function CreateIndexerModal({
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={() => onRequestClose('newIndexer')}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
     >
       <button
         type="button"
-        onClick={onRequestClose}
+        onClick={() => onRequestClose('newIndexer')}
         className="react-modal-close"
       >
         <MdClose />

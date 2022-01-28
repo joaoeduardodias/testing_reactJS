@@ -3,38 +3,40 @@ import { MdClose } from 'react-icons/md';
 import { Input } from '../Input';
 import { Container } from './styles';
 
-interface CreateIndexModalProps {
+interface EditIndexerModalProps {
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose: (modal: string) => void;
+  idIndexer?: number;
 }
 
-export function CreateIndexModal({
+export function EditIndexerModal({
   isOpen,
   onRequestClose,
-}: CreateIndexModalProps): JSX.Element {
-  function handleCreateNewIndexer(): void {
-    console.log('criar');
+  idIndexer,
+}: EditIndexerModalProps): JSX.Element {
+  function handleEditIndexer(id?: number): void {
+    console.log(`editar   ${id}`);
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={() => onRequestClose('editIndexer')}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
     >
       <button
         type="button"
-        onClick={onRequestClose}
+        onClick={() => onRequestClose('editIndexer')}
         className="react-modal-close"
       >
         <MdClose />
       </button>
-      <Container onSubmit={handleCreateNewIndexer}>
-        <h2>Cadastrar Indexador</h2>
+      <Container onSubmit={() => handleEditIndexer(idIndexer)}>
+        <h2>Editar Indexador</h2>
         <Input id="symbol" label="Simbolo" />
         <Input id="name" label="Nome" />
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Editar</button>
       </Container>
     </Modal>
   );

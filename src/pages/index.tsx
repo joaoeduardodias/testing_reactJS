@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { MdModeEdit, MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
@@ -22,16 +22,29 @@ const Home: NextPage = function () {
     useState<boolean>(false);
   const [isOpenEditIndexerModal, setIsOpenEditIndexerModal] =
     useState<boolean>(false);
-  let idIndexer: number | undefined;
+  const [EditIndexer, setEditIndexer] = useState<Indexer>();
+  const [indexers, setIndexers] = useState<Indexer[]>([]);
 
-  function handleOpenModal(modal: string, id?: number): void {
+  const GetData = useCallback(async () => {
+    const { data } = await axios.get(
+      'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
+    );
+    setIndexers(data.data);
+  }, []);
+
+  useEffect(() => {
+    GetData();
+  }, [GetData]);
+
+  function handleOpenModal(modal: string, indexer?: Indexer): void {
     switch (modal) {
       case 'newIndexer':
         setIsOpenNewIndexerModal(true);
         break;
       case 'editIndexer':
         setIsOpenEditIndexerModal(true);
-        idIndexer = id;
+        setEditIndexer(indexer);
+
         break;
       default:
         break;
@@ -50,16 +63,6 @@ const Home: NextPage = function () {
         break;
     }
   }
-  const [indexers, setIndexers] = useState<Indexer[]>([]);
-  useEffect(() => {
-    axios
-      .get(
-        'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
-      )
-      .then(response => {
-        setIndexers(response.data.data);
-      });
-  }, [indexers]);
 
   async function handleDeleteIndexer(id: number): Promise<void> {
     const responseSwal = await Swal.fire({
@@ -125,6 +128,7 @@ const Home: NextPage = function () {
             iconColor: '#e52e4d',
             title: 'Indexador excluído com sucesso!',
           });
+          GetData();
         });
     }
   }
@@ -135,12 +139,17 @@ const Home: NextPage = function () {
       <CreateIndexerModal
         isOpen={isOpenNewIndexerModal}
         onRequestClose={handleCloseModal}
+        loadData={GetData}
       />
-      <EditIndexerModal
-        isOpen={isOpenEditIndexerModal}
-        onRequestClose={handleCloseModal}
-        idIndexer={idIndexer}
-      />
+      {console.log('teste')}
+      {isOpenEditIndexerModal && (
+        <EditIndexerModal
+          isOpen={isOpenEditIndexerModal}
+          onRequestClose={handleCloseModal}
+          indexer={EditIndexer as Indexer}
+          loadData={GetData}
+        />
+      )}
       <Container>
         <Content>
           <li className="hero">
@@ -156,7 +165,7 @@ const Home: NextPage = function () {
               <ActionsIndexer>
                 <button
                   type="button"
-                  onClick={() => handleOpenModal('editIndexer', item.id)}
+                  onClick={() => handleOpenModal('editIndexer', item)}
                 >
                   <MdModeEdit />
                 </button>

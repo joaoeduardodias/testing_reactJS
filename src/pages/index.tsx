@@ -25,14 +25,16 @@ const Home: NextPage = function () {
     useState<boolean>(false);
   const [EditIndexer, setEditIndexer] = useState<Indexer>();
   const [indexers, setIndexers] = useState<Indexer[]>([]);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const GetData = useCallback(async () => {
     const response = await axios.get(
-      'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
+      `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?page=${currentPage}&size=10`
     );
-    console.log(response);
+    setTotalItems(Number(response.headers['x-total-count']));
     setIndexers(response.data.data);
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     GetData();
@@ -143,7 +145,7 @@ const Home: NextPage = function () {
         onRequestClose={handleCloseModal}
         loadData={GetData}
       />
-      {console.log('teste')}
+
       {isOpenEditIndexerModal && (
         <EditIndexerModal
           isOpen={isOpenEditIndexerModal}
@@ -180,7 +182,12 @@ const Home: NextPage = function () {
             </li>
           ))}
         </Content>
-        <NavigationPages totalItems={3} />
+        <NavigationPages
+          totalItems={totalItems}
+          onSetCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          loadData={GetData}
+        />
       </Container>
     </>
   );

@@ -9,6 +9,7 @@ import { CreateIndexerModal } from '../components/CreateIndexerModal';
 import { EditIndexerModal } from '../components/EditIndexerModal';
 import { Header } from '../components/Header';
 import { Container, Content, ActionsIndexer } from './styles';
+import { NavigationPages } from '../components/NavigationPages';
 
 interface Indexer {
   simbolo: string;
@@ -26,10 +27,11 @@ const Home: NextPage = function () {
   const [indexers, setIndexers] = useState<Indexer[]>([]);
 
   const GetData = useCallback(async () => {
-    const { data } = await axios.get(
+    const response = await axios.get(
       'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
     );
-    setIndexers(data.data);
+    console.log(response);
+    setIndexers(response.data.data);
   }, []);
 
   useEffect(() => {
@@ -157,7 +159,6 @@ const Home: NextPage = function () {
             <div>Símbolo</div>
             <section />
           </li>
-
           {indexers.map(item => (
             <li key={item.id}>
               <div>{item.nome}</div>
@@ -179,6 +180,7 @@ const Home: NextPage = function () {
             </li>
           ))}
         </Content>
+        <NavigationPages totalItems={3} />
       </Container>
     </>
   );

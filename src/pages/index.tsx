@@ -10,6 +10,7 @@ import { EditIndexerModal } from '../components/EditIndexerModal';
 import { Header } from '../components/Header';
 import { Container, Content, ActionsIndexer } from '../styles/styles';
 import { NavigationPages } from '../components/NavigationPages';
+import { FilterList } from '../components/FilterList';
 
 interface Indexer {
   simbolo: string;
@@ -27,14 +28,17 @@ const Home: NextPage = function () {
   const [indexers, setIndexers] = useState<Indexer[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [listOrderByDescending, setListOrderByDescending] =
+    useState<boolean>(false);
 
   const GetData = useCallback(async () => {
     const response = await axios.get(
-      `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?page=${currentPage}&size=10`
+      `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?orderByDescending=${listOrderByDescending}&pagepage=${currentPage}&size=10`
     );
     setTotalItems(Number(response.headers['x-total-count']));
+
     setIndexers(response.data.data);
-  }, [currentPage]);
+  }, [currentPage, listOrderByDescending]);
 
   useEffect(() => {
     GetData();
@@ -155,6 +159,10 @@ const Home: NextPage = function () {
         />
       )}
       <Container>
+        <FilterList
+          orderByDescending={setListOrderByDescending}
+          loadData={GetData}
+        />
         <Content>
           <li className="hero">
             <div>Nome</div>

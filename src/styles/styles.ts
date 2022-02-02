@@ -5,13 +5,14 @@ export const Container = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
 `;
 
 export const Content = styled.ul`
   list-style: none;
   width: 90%;
   max-width: 1120px;
-  margin-top: 5rem;
+  margin-top: 1rem;
   .hero {
     height: 2rem;
     border: 1px solid #d7d7d7;

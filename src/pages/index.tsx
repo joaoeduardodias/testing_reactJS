@@ -9,6 +9,7 @@ import { CreateIndexerModal } from '../components/CreateIndexerModal';
 import { EditIndexerModal } from '../components/EditIndexerModal';
 import { Header } from '../components/Header';
 import { Container, Content, ActionsIndexer } from './styles';
+import { NavigationPages } from '../components/NavigationPages';
 
 interface Indexer {
   simbolo: string;
@@ -24,13 +25,16 @@ const Home: NextPage = function () {
     useState<boolean>(false);
   const [EditIndexer, setEditIndexer] = useState<Indexer>();
   const [indexers, setIndexers] = useState<Indexer[]>([]);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const GetData = useCallback(async () => {
-    const { data } = await axios.get(
-      'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
+    const response = await axios.get(
+      `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?page=${currentPage}&size=10`
     );
-    setIndexers(data.data);
-  }, []);
+    setTotalItems(Number(response.headers['x-total-count']));
+    setIndexers(response.data.data);
+  }, [currentPage]);
 
   useEffect(() => {
     GetData();
@@ -141,7 +145,7 @@ const Home: NextPage = function () {
         onRequestClose={handleCloseModal}
         loadData={GetData}
       />
-      {console.log('teste')}
+
       {isOpenEditIndexerModal && (
         <EditIndexerModal
           isOpen={isOpenEditIndexerModal}
@@ -157,7 +161,6 @@ const Home: NextPage = function () {
             <div>Símbolo</div>
             <section />
           </li>
-
           {indexers.map(item => (
             <li key={item.id}>
               <div>{item.nome}</div>
@@ -179,6 +182,12 @@ const Home: NextPage = function () {
             </li>
           ))}
         </Content>
+        <NavigationPages
+          totalItems={totalItems}
+          onSetCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          loadData={GetData}
+        />
       </Container>
     </>
   );

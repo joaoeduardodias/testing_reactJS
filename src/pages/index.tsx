@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { NextPage } from 'next';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { MdModeEdit, MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
@@ -34,7 +34,7 @@ const Home: NextPage = function () {
   const [searchName, setSearchName] = useState<string>();
   const [searchSymbol, setSearchSymbol] = useState<string>();
 
-  const GetData = useEffect(() => {
+  useEffect(() => {
     async function fetchApi(): Promise<void> {
       let response;
 
@@ -47,14 +47,12 @@ const Home: NextPage = function () {
           `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?simbolo=${searchSymbol}`
         );
       } else {
-        console.log(listOrderByDescending);
         response = await axios.get(
-          `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?orderByDescending=${listOrderByDescending}&pagepage=${currentPage}&size=10`
+          `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?orderByDescending=${listOrderByDescending}&page=${currentPage}&size=10`
         );
       }
 
       setTotalItems(Number(response.headers['x-total-count']));
-
       setIndexers(response.data.data);
     }
     fetchApi();
@@ -152,7 +150,6 @@ const Home: NextPage = function () {
             iconColor: '#e52e4d',
             title: 'Indexador excluído com sucesso!',
           });
-          GetData();
         });
     }
   }
@@ -212,7 +209,6 @@ const Home: NextPage = function () {
           totalItems={totalItems}
           onSetCurrentPage={setCurrentPage}
           currentPage={currentPage}
-          loadData={() => console.log('teste')}
         />
       </Container>
     </>

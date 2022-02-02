@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { MdModeEdit, MdDeleteOutline } from 'react-icons/md';
 import axios from 'axios';
@@ -34,6 +34,7 @@ const Home: NextPage = function () {
   const [searchName, setSearchName] = useState<string>();
   const [searchSymbol, setSearchSymbol] = useState<string>();
 
+  // filter and search
   useEffect(() => {
     async function fetchApi(): Promise<void> {
       let response;
@@ -57,6 +58,16 @@ const Home: NextPage = function () {
     }
     fetchApi();
   }, [currentPage, listOrderByDescending, searchName, searchSymbol]);
+  const getData = useCallback(async () => {
+    const { data } = await axios.get(
+      'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
+    );
+    setIndexers(data.data);
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   function handleOpenModal(modal: string, indexer?: Indexer): void {
     switch (modal) {
@@ -150,6 +161,7 @@ const Home: NextPage = function () {
             iconColor: '#e52e4d',
             title: 'Indexador excluído com sucesso!',
           });
+          getData();
         });
     }
   }
@@ -160,7 +172,7 @@ const Home: NextPage = function () {
       <CreateIndexerModal
         isOpen={isOpenNewIndexerModal}
         onRequestClose={handleCloseModal}
-        loadData={() => console.log('testes')}
+        loadData={getData}
       />
 
       {isOpenEditIndexerModal && (
@@ -168,7 +180,7 @@ const Home: NextPage = function () {
           isOpen={isOpenEditIndexerModal}
           onRequestClose={handleCloseModal}
           indexer={EditIndexer as Indexer}
-          loadData={() => console.log('testes')}
+          loadData={getData}
         />
       )}
       <Container>

@@ -6,14 +6,12 @@ interface NavigationPagesProps {
   totalItems: number;
   onSetCurrentPage: (page: number) => void;
   currentPage: number;
-  loadData: () => void;
 }
 
 export function NavigationPages({
   totalItems,
   onSetCurrentPage,
   currentPage,
-  loadData,
 }: NavigationPagesProps): JSX.Element {
   const [totalPages, setTotalPages] = useState<number[]>([]);
   useEffect(() => {
@@ -28,7 +26,6 @@ export function NavigationPages({
 
   function handleAlterPage(page: number): void {
     onSetCurrentPage(page);
-    loadData();
   }
 
   return (

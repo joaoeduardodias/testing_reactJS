@@ -34,31 +34,40 @@ const Home: NextPage = function () {
   const [searchName, setSearchName] = useState<string>();
   const [searchSymbol, setSearchSymbol] = useState<string>();
 
-  const GetData = useCallback(async () => {
-    let response;
+  // filter and search
+  useEffect(() => {
+    async function fetchApi(): Promise<void> {
+      let response;
 
-    if (searchName && searchName !== ' ') {
-      response = await axios.get(
-        `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?nome=${searchName}`
-      );
-    } else if (searchSymbol && searchSymbol !== ' ') {
-      response = await axios.get(
-        `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?simbolo=${searchSymbol}`
-      );
-    } else {
-      response = await axios.get(
-        `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?orderByDescending=${listOrderByDescending}&pagepage=${currentPage}&size=10`
-      );
+      if (searchName && searchName !== ' ') {
+        response = await axios.get(
+          `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?nome=${searchName}`
+        );
+      } else if (searchSymbol && searchSymbol !== ' ') {
+        response = await axios.get(
+          `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?simbolo=${searchSymbol}`
+        );
+      } else {
+        response = await axios.get(
+          `https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores?orderByDescending=${listOrderByDescending}&page=${currentPage}&size=10`
+        );
+      }
+
+      setTotalItems(Number(response.headers['x-total-count']));
+      setIndexers(response.data.data);
     }
-
-    setTotalItems(Number(response.headers['x-total-count']));
-
-    setIndexers(response.data.data);
+    fetchApi();
   }, [currentPage, listOrderByDescending, searchName, searchSymbol]);
+  const getData = useCallback(async () => {
+    const { data } = await axios.get(
+      'https://oliveira-rondelli-api.herokuapp.com/api/planogestor/indexadores'
+    );
+    setIndexers(data.data);
+  }, []);
 
   useEffect(() => {
-    GetData();
-  }, [GetData]);
+    getData();
+  }, [getData]);
 
   function handleOpenModal(modal: string, indexer?: Indexer): void {
     switch (modal) {
@@ -152,7 +161,7 @@ const Home: NextPage = function () {
             iconColor: '#e52e4d',
             title: 'Indexador excluído com sucesso!',
           });
-          GetData();
+          getData();
         });
     }
   }
@@ -163,7 +172,7 @@ const Home: NextPage = function () {
       <CreateIndexerModal
         isOpen={isOpenNewIndexerModal}
         onRequestClose={handleCloseModal}
-        loadData={GetData}
+        loadData={getData}
       />
 
       {isOpenEditIndexerModal && (
@@ -171,19 +180,16 @@ const Home: NextPage = function () {
           isOpen={isOpenEditIndexerModal}
           onRequestClose={handleCloseModal}
           indexer={EditIndexer as Indexer}
-          loadData={GetData}
+          loadData={getData}
         />
       )}
       <Container>
         <InputSearch
           onSetSearchName={setSearchName}
           onSetSearchSymbol={setSearchSymbol}
-          loadData={GetData}
+          loadData={() => console.log('testes')}
         />
-        <FilterList
-          orderByDescending={setListOrderByDescending}
-          loadData={GetData}
-        />
+        <FilterList orderByDescending={setListOrderByDescending} />
         <Content>
           <li className="hero">
             <div>Nome</div>
@@ -215,7 +221,6 @@ const Home: NextPage = function () {
           totalItems={totalItems}
           onSetCurrentPage={setCurrentPage}
           currentPage={currentPage}
-          loadData={GetData}
         />
       </Container>
     </>

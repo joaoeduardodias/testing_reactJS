@@ -28,6 +28,7 @@ export function NavigationPages({
 
   function handleAlterPage(page: number): void {
     onSetCurrentPage(page);
+    console.log(page);
     loadData();
   }
 

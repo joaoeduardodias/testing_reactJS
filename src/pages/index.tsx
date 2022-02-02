@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { CreateIndexerModal } from '../components/CreateIndexerModal';
 import { EditIndexerModal } from '../components/EditIndexerModal';
 import { Header } from '../components/Header';
-import { Container, Content, ActionsIndexer } from './styles';
+import { Container, Content, ActionsIndexer } from '../styles/styles';
 import { NavigationPages } from '../components/NavigationPages';
 
 interface Indexer {
